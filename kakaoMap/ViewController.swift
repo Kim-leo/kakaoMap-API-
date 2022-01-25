@@ -163,7 +163,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
     }
     
     @objc func loadAddressFromCSV(_ sender: UIButton) {
-        let path = Bundle.main.path(forResource: "location", ofType: ".csv")!
+        let path = Bundle.main.path(forResource: "nameAndAddress", ofType: ".csv")!
         parseLocationCSV(url: URL(fileURLWithPath: path))
         print(nameAndAddress)
     }
