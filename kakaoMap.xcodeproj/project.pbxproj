@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7C98ECAB279960890007E8F8 /* LotteryStoreAddress.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7C98ECAA279960890007E8F8 /* LotteryStoreAddress.csv */; };
+		7C98ECD027A0235C0007E8F8 /* location.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7C98ECCF27A0235C0007E8F8 /* location.csv */; };
 		7CCC82B5277EFCFF00848079 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCC82B4277EFCFF00848079 /* AppDelegate.swift */; };
 		7CCC82B7277EFCFF00848079 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCC82B6277EFCFF00848079 /* SceneDelegate.swift */; };
 		7CCC82B9277EFCFF00848079 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCC82B8277EFCFF00848079 /* ViewController.swift */; };
@@ -51,6 +53,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7C98ECAA279960890007E8F8 /* LotteryStoreAddress.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LotteryStoreAddress.csv; sourceTree = "<group>"; };
+		7C98ECCF27A0235C0007E8F8 /* location.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = location.csv; sourceTree = "<group>"; };
 		7CCC82B1277EFCFF00848079 /* kakaoMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kakaoMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CCC82B4277EFCFF00848079 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7CCC82B6277EFCFF00848079 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -152,6 +156,8 @@
 				7CCC82BD277EFD0100848079 /* Assets.xcassets */,
 				7CCC82BF277EFD0100848079 /* LaunchScreen.storyboard */,
 				7CCC82C2277EFD0100848079 /* Info.plist */,
+				7C98ECAA279960890007E8F8 /* LotteryStoreAddress.csv */,
+				7C98ECCF27A0235C0007E8F8 /* location.csv */,
 			);
 			path = kakaoMap;
 			sourceTree = "<group>";
@@ -309,6 +315,7 @@
 				7CCC8343277EFF1400848079 /* map_pin_custom.png in Resources */,
 				7CCC8353277EFF1400848079 /* map_pinup_custom.png in Resources */,
 				7CCC8348277EFF1400848079 /* map_pinup@3x.png in Resources */,
+				7C98ECAB279960890007E8F8 /* LotteryStoreAddress.csv in Resources */,
 				7CCC8352277EFF1400848079 /* point_sprite.png in Resources */,
 				7CCC835A277EFF1400848079 /* map_present_background_update.png in Resources */,
 				7CCC8356277EFF1400848079 /* map_present_direction.png in Resources */,
@@ -318,6 +325,7 @@
 				7CCC82BC277EFCFF00848079 /* Main.storyboard in Resources */,
 				7CCC835B277EFF1500848079 /* daum_th_line.png in Resources */,
 				7CCC8345277EFF1400848079 /* map_pinup.png in Resources */,
+				7C98ECD027A0235C0007E8F8 /* location.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,16 +9,62 @@ import UIKit
 
 public let defaultPosition = MTMapPointGeo(latitude: 37.576568, longitude: 127.029148)
 
-class ViewController: UIViewController, MTMapViewDelegate {
+class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
     
-    public let stackView = UIStackView()
+    var nameAndAddress = [[String]]()
     
-    public let btn1 = UIButton()
-    public let btn2 = UIButton()
-    public let btn3 = UIButton()
-    public let btn4 = UIButton()
+    let searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.backgroundColor = .clear
+        searchBar.barTintColor = .clear
+        searchBar.searchTextField.backgroundColor = .white
+        searchBar.isTranslucent = true
+        searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+        return searchBar
+    }()
     
-    public let label = UILabel(frame: CGRect(x: 100, y: 100, width: 100, height: 50))
+    let currentLocBtn: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("", for: .normal)
+        btn.backgroundColor = .systemBlue
+        btn.layer.cornerRadius = 20
+        btn.setImage(UIImage(named: "location"), for: .normal)
+        btn.setBackgroundImage(UIImage(named: "location"), for: .normal)
+        btn.addTarget(self, action: #selector(loadAddressFromCSV(_:)), for: .touchUpInside)
+        return btn
+    }()
+    
+    let checkWinBtn: UIButton = {
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        btn.layer.cornerRadius = 10
+        btn.backgroundColor = .red
+        return btn
+    }()
+    
+    let nearStoreLocBtn: UIButton = {
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        btn.layer.cornerRadius = 10
+        btn.backgroundColor = .orange
+        return btn
+    }()
+    
+    let recommendNumberBtn: UIButton = {
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        btn.layer.cornerRadius = 10
+        btn.backgroundColor = .yellow
+        return btn
+    }()
+    
+    let bottomStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.backgroundColor = .clear
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        stackView.spacing = 8.0
+        return stackView
+    }()
+    
+    
 
     var mapView: MTMapView!
     
@@ -26,7 +72,7 @@ class ViewController: UIViewController, MTMapViewDelegate {
     var poilItem1: MTMapPOIItem?
     
     //검색기능
-    let searchController = UISearchController()
+    let searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +80,7 @@ class ViewController: UIViewController, MTMapViewDelegate {
         mapView = MTMapView(frame: self.view.frame)
         mapView.delegate = self
         mapView.baseMapType = .standard
+        self.view.addSubview(mapView)
         
         //지도 중심점, 레벨
         mapView.setMapCenter(MTMapPoint(geoCoord: defaultPosition), animated: true)
@@ -50,76 +97,82 @@ class ViewController: UIViewController, MTMapViewDelegate {
         poilItem1?.itemName = "현재 위치"
         mapView.add(poilItem1)
         
-        self.view.addSubview(mapView)
+       //searchBar
+        searchBar.delegate = self
+        self.view.addSubview(searchBar)
+        searchBarAutoLayout()
         
-        //검색기능
-        navigationItem.searchController = searchController
+       //stackview and 3 buttons
+        self.view.addSubview(bottomStackView)
+        bottomStackViewAutoLayout()
         
-        //스택뷰와 버튼 4개
-        btn1.backgroundColor = .lightGray
-        btn1.setTitle("test 1", for: .normal)
-        btn1.addTarget(self, action: #selector(btn1Action), for: .touchUpInside)
-        btn1.translatesAutoresizingMaskIntoConstraints = false
-        btn1.layer.cornerRadius = 10
+        self.view.addSubview(currentLocBtn)
+        currentLocBtnAutoLayout()
         
-        btn2.backgroundColor = .black
-        btn2.setTitle("test 2", for: .normal)
-        btn2.addTarget(self, action: #selector(btn2Action), for: .touchUpInside)
-        btn2.translatesAutoresizingMaskIntoConstraints = false
-        btn2.layer.cornerRadius = 10
-        
-        btn3.backgroundColor = UIColor(red: 0.2, green: 0.3, blue: 1, alpha: 1)
-        btn3.setTitle("test 3", for: .normal)
-        btn3.addTarget(self, action: #selector(btn3Action), for: .touchUpInside)
-        btn3.translatesAutoresizingMaskIntoConstraints = false
-        btn3.layer.cornerRadius = 10
-        
-        btn4.backgroundColor = .systemIndigo
-        btn4.setTitle("test 4", for: .normal)
-        btn4.addTarget(self, action: #selector(btn4Action), for: .touchUpInside)
-        btn4.translatesAutoresizingMaskIntoConstraints = false
-        btn4.layer.cornerRadius = 10
-
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
-        stackView.spacing = 8.0
-        stackView.axis = .horizontal
-        
-        self.view.addSubview(stackView)
-        
-        NSLayoutConstraint.activate([
-            //stackView.topAnchor.constraint(equalTo: view.topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
-        ])
-        
-        stackView.addArrangedSubview(btn1)
-        stackView.addArrangedSubview(btn2)
-        stackView.addArrangedSubview(btn3)
-        stackView.addArrangedSubview(btn4)
-        self.view.addSubview(label)
+        bottomStackView.addArrangedSubview(checkWinBtn)
+        bottomStackView.addArrangedSubview(nearStoreLocBtn)
+        bottomStackView.addArrangedSubview(recommendNumberBtn)
          
     }
     
-    @objc func btn1Action(sender: UIButton!) {
-        label.text = "btn1"
+    func searchBarAutoLayout() {
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor).isActive = true
+        searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
+        searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
     }
     
-    @objc func btn2Action(sender: UIButton!) {
-        label.text = "btn2"
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let text = searchBar.text {
+            print(text)
+        }
     }
     
-    @objc func btn3Action(sender: UIButton!) {
-        label.text = "btn3"
+    
+    func currentLocBtnAutoLayout() {
+        currentLocBtn.translatesAutoresizingMaskIntoConstraints = false
+        currentLocBtn.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        currentLocBtn.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        currentLocBtn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
+        currentLocBtn.bottomAnchor.constraint(equalTo: bottomStackView.topAnchor, constant: -20).isActive = true
     }
     
-    @objc func btn4Action(sender: UIButton!) {
-        label.text = "btn4"
+    func bottomStackViewAutoLayout() {
+        bottomStackView.translatesAutoresizingMaskIntoConstraints = false
+        bottomStackView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        bottomStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        bottomStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        bottomStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30).isActive = true
     }
+    
+    func parseLocationCSV(url: URL) {
+        do {
+            let data = try Data(contentsOf: url)
+            let dataEncoded = String(data: data, encoding: .utf8)
+            
+            if let dataArr = dataEncoded?.components(separatedBy: "\n").map({$0.components(separatedBy: ",")}) {
+                for item in dataArr {
+                    if nameAndAddress.count < 50 {
+                        nameAndAddress.append(item)
+                    }
+                }
+            }
+        } catch {
+            print("Error")
+        }
+    }
+    
+    @objc func loadAddressFromCSV(_ sender: UIButton) {
+        let path = Bundle.main.path(forResource: "location", ofType: ".csv")!
+        parseLocationCSV(url: URL(fileURLWithPath: path))
+        print(nameAndAddress)
+    }
+    
     
 }
+
+
+
 
 func mapView(_ mapView: MTMapView!, updateCurrentLocation location: MTMapPoint!, withAccuracy accuracy: MTMapLocationAccuracy) {
     let currentLocation = location?.mapPointGeo()
