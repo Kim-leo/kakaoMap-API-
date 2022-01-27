@@ -30,7 +30,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
         btn.layer.cornerRadius = 20
         btn.setImage(UIImage(named: "location"), for: .normal)
         btn.setBackgroundImage(UIImage(named: "location"), for: .normal)
-        btn.addTarget(self, action: #selector(loadAddressFromCSV(_:)), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(backToCurrentPlace), for: .touchUpInside)
         return btn
     }()
     
@@ -45,6 +45,8 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
         let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         btn.layer.cornerRadius = 10
         btn.backgroundColor = .orange
+        btn.setTitle("주변 가게", for: .normal)
+        btn.addTarget(self, action: #selector(loadAddressFromCSV(_:)), for: .touchUpInside)
         return btn
     }()
     
@@ -52,6 +54,9 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
         let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         btn.layer.cornerRadius = 10
         btn.backgroundColor = .yellow
+        btn.setTitleColor(.black, for: .normal)
+        btn.setTitle("번호 추천", for: .normal)
+        btn.addTarget(self, action: #selector(randomNumber), for: .touchUpInside)
         return btn
     }()
     
@@ -168,6 +173,22 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
         print(nameAndAddress)
     }
     
+    @objc func randomNumber() {
+        var numbers: [Int] = []
+        while numbers.count < 6 {
+            let number = Int.random(in: 1...45)
+            if !numbers.contains(number) {
+                numbers.append(number)
+            }
+        }
+        for i in numbers.sorted() {
+            print(i, terminator: " ")
+        }
+    }
+    
+    @objc func backToCurrentPlace() {
+        //let url = "kakaomap://look?p=37.537229,127.005515"
+    }
     
 }
 
