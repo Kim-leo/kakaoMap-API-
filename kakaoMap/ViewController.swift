@@ -187,7 +187,9 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
     }
     
     @objc func backToCurrentPlace() {
-        //let url = "kakaomap://look?p=37.537229,127.005515"
+        mapView.setMapCenter(MTMapPoint(geoCoord: defaultPosition), animated: true)
+        mapView.showCurrentLocationMarker = true
+        mapView.currentLocationTrackingMode = .onWithHeading
     }
     
 }
