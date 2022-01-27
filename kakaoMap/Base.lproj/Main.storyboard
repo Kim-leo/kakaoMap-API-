@@ -24,6 +24,21 @@
             </objects>
             <point key="canvasLocation" x="1042.0289855072465" y="69.642857142857139"/>
         </scene>
+        <!--Pop Up View Controller-->
+        <scene sceneID="MzJ-eC-CDa">
+            <objects>
+                <viewController id="opK-Zy-ffd" customClass="PopUpViewController" customModule="kakaoMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="YZC-Ku-CMq">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="ukA-Ci-eaw"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rEY-t1-9LL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2010" y="70"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="xoa-TY-EN5">
             <objects>

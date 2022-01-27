@@ -56,7 +56,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
         btn.backgroundColor = .yellow
         btn.setTitleColor(.black, for: .normal)
         btn.setTitle("번호 추천", for: .normal)
-        btn.addTarget(self, action: #selector(randomNumber), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(didTapPopUpBtn(_:)), for: .touchUpInside)
         return btn
     }()
     
@@ -190,6 +190,13 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
         mapView.setMapCenter(MTMapPoint(geoCoord: defaultPosition), animated: true)
         mapView.showCurrentLocationMarker = true
         mapView.currentLocationTrackingMode = .onWithHeading
+    }
+    
+    @objc func didTapPopUpBtn(_ sender: UIButton) {
+        print("Tap")
+        let popUpViewController = PopUpViewController()
+        popUpViewController.modalPresentationStyle = .overCurrentContext
+        present(popUpViewController, animated: true, completion: nil)
     }
     
 }
