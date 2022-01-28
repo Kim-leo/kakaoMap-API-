@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 public let defaultPosition = MTMapPointGeo(latitude: 37.576568, longitude: 127.029148)
 

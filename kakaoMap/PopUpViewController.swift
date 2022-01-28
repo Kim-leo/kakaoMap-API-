@@ -186,7 +186,14 @@ final class PopUpViewController: UIViewController {
         label5.text = "\(sortedNums[4])"
         label6.text = "\(sortedNums[5])"
         label7.text = "\(sortedNums[6])"
-        
+        /*
+        var labelArr =  [UILabel]()
+        let numberColor = [UIColor.systemYellow, UIColor.systemBlue,
+                           UIColor.systemRed, UIColor.systemGray, UIColor.systemGreen]
+        for labels in labelArr {
+            labels.textColor = numberColor[labels.sortednum / 10]
+        }
+         */
         switch sortedNums[0] {
             case 1...10:
                 label1.backgroundColor = .systemYellow
