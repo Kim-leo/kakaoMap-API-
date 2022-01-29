@@ -27,9 +27,10 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
     let currentLocBtn: UIButton = {
         let btn = UIButton()
         btn.setTitle("", for: .normal)
-        btn.backgroundColor = .systemBlue
+        btn.backgroundColor = .clear
         btn.layer.cornerRadius = 20
-        btn.setImage(UIImage(named: "location"), for: .normal)
+        btn.setImage(UIImage(named: "currentLocation.png"), for: .normal)
+        btn.tintColor = .systemBlue
         btn.setBackgroundImage(UIImage(named: "location"), for: .normal)
         btn.addTarget(self, action: #selector(backToCurrentPlace), for: .touchUpInside)
         return btn
