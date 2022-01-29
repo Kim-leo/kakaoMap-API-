@@ -13,87 +13,10 @@ final class PopUpViewController: UIViewController {
     
     private let popUpView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.systemGray5
+        view.backgroundColor = UIColor.lightGray
         view.layer.cornerRadius = 15
         view.layer.masksToBounds = true
         return view
-    }()
-    
-    let label1: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-        label.backgroundColor = .systemRed
-        label.textColor = .black
-        label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.layer.cornerRadius = label.frame.width/2
-        label.layer.masksToBounds = true
-        return label
-    }()
-    
-    let label2: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-        label.backgroundColor = .systemOrange
-        label.textColor = .black
-        label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.layer.cornerRadius = label.frame.width/2
-        label.layer.masksToBounds = true
-        return label
-    }()
-    
-    let label3: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-        label.backgroundColor = .systemYellow
-        label.textColor = .black
-        label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.layer.cornerRadius = label.frame.width/2
-        label.layer.masksToBounds = true
-        return label
-    }()
-    
-    let label4: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-        label.backgroundColor = .systemGreen
-        label.textColor = .black
-        label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.layer.cornerRadius = label.frame.width/2
-        label.layer.masksToBounds = true
-        return label
-    }()
-    
-    let label5: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-        label.backgroundColor = .systemBlue
-        label.textColor = .black
-        label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.layer.cornerRadius = label.frame.width/2
-        label.layer.masksToBounds = true
-        return label
-    }()
-    
-    let label6: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-        label.backgroundColor = .systemGray
-        label.textColor = .black
-        label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.layer.cornerRadius = label.frame.width/2
-        label.layer.masksToBounds = true
-        return label
-    }()
-    
-    let label7: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-        label.backgroundColor = .purple
-        label.textColor = .black
-        label.textAlignment = .center
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.layer.cornerRadius = label.frame.width/2
-        label.layer.masksToBounds = true
-        return label
     }()
     
     let topStackView: UIStackView = {
@@ -133,29 +56,40 @@ final class PopUpViewController: UIViewController {
         btn.addTarget(self, action: #selector(didTapDismissBtn(_:)), for: .touchUpInside)
         return btn
     }()
+    
+    let labelArr: [UILabel] = {
+        var labelArr = [UILabel]()
+        
+        for _ in 0...5 {
+            let labels = UILabel()
+            
+            labels.textColor = .black
+            labels.textAlignment = .center
+            labels.layer.cornerRadius = 15
+            labels.layer.masksToBounds = true
+            labelArr.append(labels)
+        }
+        
+        return labelArr
+    }()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.backgroundColor = .clear
-        view.alpha = 0.9
         
         randomNumber()
         
         view.backgroundColor = UIColor.white.withAlphaComponent(0.8)
+        
         view.addSubview(popUpView)
         PopUpViewAutoLayout()
         
         popUpView.addSubview(topStackView)
         topStackViewAutoLayout()
         
-        topStackView.addArrangedSubview(label1)
-        topStackView.addArrangedSubview(label2)
-        topStackView.addArrangedSubview(label3)
-        topStackView.addArrangedSubview(label4)
-        topStackView.addArrangedSubview(label5)
-        topStackView.addArrangedSubview(label6)
-        topStackView.addArrangedSubview(label7)
+        for i in 0...5 {
+            topStackView.addArrangedSubview(labelArr[i])
+        }
         
         
         popUpView.addSubview(bottomStackView)
@@ -163,14 +97,9 @@ final class PopUpViewController: UIViewController {
   
         bottomStackView.addArrangedSubview(anotherNumbersBtn)
         bottomStackView.addArrangedSubview(dismissBtn)
-        
-        
-       
-        
     }
     
     func randomNumber() {
-        
         while numbers.count < 7 {
             let number = Int.random(in: 1...45)
             if !numbers.contains(number) {
@@ -179,107 +108,17 @@ final class PopUpViewController: UIViewController {
         }
         
         let sortedNums = numbers.sorted()
-        label1.text = "\(sortedNums[0])"
-        label2.text = "\(sortedNums[1])"
-        label3.text = "\(sortedNums[2])"
-        label4.text = "\(sortedNums[3])"
-        label5.text = "\(sortedNums[4])"
-        label6.text = "\(sortedNums[5])"
-        label7.text = "\(sortedNums[6])"
-        /*
-        var labelArr =  [UILabel]()
+        for i in 0...5 {
+            labelArr[i].text = "\(sortedNums[i])"
+        }
+        
         let numberColor = [UIColor.systemYellow, UIColor.systemBlue,
                            UIColor.systemRed, UIColor.systemGray, UIColor.systemGreen]
-        for labels in labelArr {
-            labels.textColor = numberColor[labels.sortednum / 10]
-        }
-         */
-        switch sortedNums[0] {
-            case 1...10:
-                label1.backgroundColor = .systemYellow
-            case 11...20:
-                label1.backgroundColor = .systemBlue
-            case 21...30:
-                label1.backgroundColor = .systemRed
-            case 31...40:
-                label1.backgroundColor = .systemGray
-            default:
-                label1.backgroundColor = .systemGreen
-        }
-        switch sortedNums[1] {
-            case 1...10:
-                label2.backgroundColor = .systemYellow
-            case 11...20:
-                label2.backgroundColor = .systemBlue
-            case 21...30:
-                label2.backgroundColor = .systemRed
-            case 31...40:
-                label2.backgroundColor = .systemGray
-            default:
-                label2.backgroundColor = .systemGreen
-        }
-        switch sortedNums[2] {
-            case 1...10:
-                label3.backgroundColor = .systemYellow
-            case 11...20:
-                label3.backgroundColor = .systemBlue
-            case 21...30:
-                label3.backgroundColor = .systemRed
-            case 31...40:
-                label3.backgroundColor = .systemGray
-            default:
-                label3.backgroundColor = .systemGreen
-        }
-        switch sortedNums[3] {
-            case 1...10:
-                label4.backgroundColor = .systemYellow
-            case 11...20:
-                label4.backgroundColor = .systemBlue
-            case 21...30:
-                label4.backgroundColor = .systemRed
-            case 31...40:
-                label4.backgroundColor = .systemGray
-            default:
-                label4.backgroundColor = .systemGreen
-        }
-        switch sortedNums[4] {
-            case 1...10:
-                label5.backgroundColor = .systemYellow
-            case 11...20:
-                label5.backgroundColor = .systemBlue
-            case 21...30:
-                label5.backgroundColor = .systemRed
-            case 31...40:
-                label5.backgroundColor = .systemGray
-            default:
-                label5.backgroundColor = .systemGreen
-        }
-        switch sortedNums[5] {
-            case 1...10:
-                label6.backgroundColor = .systemYellow
-            case 11...20:
-                label6.backgroundColor = .systemBlue
-            case 21...30:
-                label6.backgroundColor = .systemRed
-            case 31...40:
-                label6.backgroundColor = .systemGray
-            default:
-                label6.backgroundColor = .systemGreen
-        }
-        switch sortedNums[6] {
-            case 1...10:
-                label7.backgroundColor = .systemYellow
-            case 11...20:
-                label7.backgroundColor = .systemBlue
-            case 21...30:
-                label7.backgroundColor = .systemRed
-            case 31...40:
-                label7.backgroundColor = .systemGray
-            default:
-                label7.backgroundColor = .systemGreen
+        for i in 0...5 {
+            labelArr[i].backgroundColor = numberColor[sortedNums[i]/10]
         }
     }
-    
+
     func PopUpViewAutoLayout() {
         popUpView.translatesAutoresizingMaskIntoConstraints = false
         popUpView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -310,6 +149,7 @@ final class PopUpViewController: UIViewController {
     
     @objc func anotherNumbers(_ sender: UIButton) {
         
+        
         var numbers: [Int] = []
         
         while numbers.count < 7 {
@@ -320,98 +160,18 @@ final class PopUpViewController: UIViewController {
         }
         
         let sortedNums = numbers.sorted()
-        label1.text = "\(sortedNums[0])"
-        label2.text = "\(sortedNums[1])"
-        label3.text = "\(sortedNums[2])"
-        label4.text = "\(sortedNums[3])"
-        label5.text = "\(sortedNums[4])"
-        label6.text = "\(sortedNums[5])"
-        label7.text = "\(sortedNums[6])"
         
-        switch sortedNums[0] {
-            case 1...10:
-                label1.backgroundColor = .systemYellow
-            case 11...20:
-                label1.backgroundColor = .systemBlue
-            case 21...30:
-                label1.backgroundColor = .systemRed
-            case 31...40:
-                label1.backgroundColor = .systemGray
-            default:
-                label1.backgroundColor = .systemGreen
+        for i in 0...5 {
+            labelArr[i].text = "\(sortedNums[i])"
         }
-        switch sortedNums[1] {
-            case 1...10:
-                label2.backgroundColor = .systemYellow
-            case 11...20:
-                label2.backgroundColor = .systemBlue
-            case 21...30:
-                label2.backgroundColor = .systemRed
-            case 31...40:
-                label2.backgroundColor = .systemGray
-            default:
-                label2.backgroundColor = .systemGreen
+        
+        let numberColor = [UIColor.systemYellow, UIColor.systemBlue,
+                           UIColor.systemRed, UIColor.systemGray, UIColor.systemGreen]
+        for i in 0...5 {
+            labelArr[i].backgroundColor = numberColor[sortedNums[i]/10]
         }
-        switch sortedNums[2] {
-            case 1...10:
-                label3.backgroundColor = .systemYellow
-            case 11...20:
-                label3.backgroundColor = .systemBlue
-            case 21...30:
-                label3.backgroundColor = .systemRed
-            case 31...40:
-                label3.backgroundColor = .systemGray
-            default:
-                label3.backgroundColor = .systemGreen
-        }
-        switch sortedNums[3] {
-            case 1...10:
-                label4.backgroundColor = .systemYellow
-            case 11...20:
-                label4.backgroundColor = .systemBlue
-            case 21...30:
-                label4.backgroundColor = .systemRed
-            case 31...40:
-                label4.backgroundColor = .systemGray
-            default:
-                label4.backgroundColor = .systemGreen
-        }
-        switch sortedNums[4] {
-            case 1...10:
-                label5.backgroundColor = .systemYellow
-            case 11...20:
-                label5.backgroundColor = .systemBlue
-            case 21...30:
-                label5.backgroundColor = .systemRed
-            case 31...40:
-                label5.backgroundColor = .systemGray
-            default:
-                label5.backgroundColor = .systemGreen
-        }
-        switch sortedNums[5] {
-            case 1...10:
-                label6.backgroundColor = .systemYellow
-            case 11...20:
-                label6.backgroundColor = .systemBlue
-            case 21...30:
-                label6.backgroundColor = .systemRed
-            case 31...40:
-                label6.backgroundColor = .systemGray
-            default:
-                label6.backgroundColor = .systemGreen
-        }
-        switch sortedNums[6] {
-            case 1...10:
-                label7.backgroundColor = .systemYellow
-            case 11...20:
-                label7.backgroundColor = .systemBlue
-            case 21...30:
-                label7.backgroundColor = .systemRed
-            case 31...40:
-                label7.backgroundColor = .systemGray
-            default:
-                label7.backgroundColor = .systemGreen
-        }
+        
+        
     }
 }
 
