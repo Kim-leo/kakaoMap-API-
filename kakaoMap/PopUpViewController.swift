@@ -120,27 +120,30 @@ final class PopUpViewController: UIViewController {
     }
 
     func PopUpViewAutoLayout() {
-        popUpView.translatesAutoresizingMaskIntoConstraints = false
-        popUpView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        popUpView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        popUpView.widthAnchor.constraint(equalToConstant: 400).isActive = true
-        popUpView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        popUpView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+            make.width.equalTo(400)
+            make.height.equalTo(150)
+        }
     }
     
     func topStackViewAutoLayout() {
-        topStackView.translatesAutoresizingMaskIntoConstraints = false
-        topStackView.heightAnchor.constraint(equalToConstant: 45).isActive = true
-        topStackView.leadingAnchor.constraint(equalTo: popUpView.leadingAnchor, constant: 5).isActive = true
-        topStackView.trailingAnchor.constraint(equalTo: popUpView.trailingAnchor, constant: -5).isActive = true
-        topStackView.topAnchor.constraint(equalTo: popUpView.topAnchor, constant: 15).isActive = true
+        topStackView.snp.makeConstraints { make in
+            make.size.height.equalTo(45)
+            make.leading.equalTo(popUpView.snp.leading).offset(5)
+            make.trailing.equalTo(popUpView.snp.trailing).offset(-5)
+            make.top.equalTo(popUpView.snp.top).offset(15)
+        }
     }
     
     func bottomStackViewAutoLayout() {
-        bottomStackView.translatesAutoresizingMaskIntoConstraints = false
-        bottomStackView.leadingAnchor.constraint(equalTo: popUpView.leadingAnchor, constant: 5).isActive = true
-        bottomStackView.trailingAnchor.constraint(equalTo: popUpView.trailingAnchor, constant: -5).isActive = true
-        bottomStackView.topAnchor.constraint(equalTo: topStackView.bottomAnchor, constant: 25).isActive = true
-        bottomStackView.bottomAnchor.constraint(equalTo: popUpView.bottomAnchor, constant: -20).isActive = true
+        bottomStackView.snp.makeConstraints { make in
+            make.leading.equalTo(popUpView.snp.leading).offset(5)
+            make.trailing.equalTo(popUpView.snp.trailing).offset(-5)
+            make.top.equalTo(topStackView.snp.bottom).offset(25)
+            make.bottom.equalTo(popUpView.snp.bottom).offset(-20)
+        }
     }
     
     @objc func didTapDismissBtn(_ sender: UIButton) {

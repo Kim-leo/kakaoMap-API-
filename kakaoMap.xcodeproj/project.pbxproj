@@ -10,6 +10,7 @@
 		5A0AAE6AAE73111EB999B23D /* Pods_kakaoMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F8AED155BFC1F6A217FE220 /* Pods_kakaoMap.framework */; };
 		7C577B8027A060F50071CE57 /* nameAndAddress.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7C577B7F27A060F50071CE57 /* nameAndAddress.csv */; };
 		7C577BA627A2E7C70071CE57 /* PopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C577BA527A2E7C70071CE57 /* PopUpViewController.swift */; };
+		7C577BE827ABB0BD0071CE57 /* checkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C577BE727ABB0BD0071CE57 /* checkViewController.swift */; };
 		7C98ECD027A0235C0007E8F8 /* location.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7C98ECCF27A0235C0007E8F8 /* location.csv */; };
 		7CCC82B5277EFCFF00848079 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCC82B4277EFCFF00848079 /* AppDelegate.swift */; };
 		7CCC82B7277EFCFF00848079 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCC82B6277EFCFF00848079 /* SceneDelegate.swift */; };
@@ -57,6 +58,7 @@
 /* Begin PBXFileReference section */
 		7C577B7F27A060F50071CE57 /* nameAndAddress.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = nameAndAddress.csv; sourceTree = "<group>"; };
 		7C577BA527A2E7C70071CE57 /* PopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpViewController.swift; sourceTree = "<group>"; };
+		7C577BE727ABB0BD0071CE57 /* checkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = checkViewController.swift; sourceTree = "<group>"; };
 		7C98ECCF27A0235C0007E8F8 /* location.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = location.csv; sourceTree = "<group>"; };
 		7CCC82B1277EFCFF00848079 /* kakaoMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kakaoMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CCC82B4277EFCFF00848079 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				7CCC82B4277EFCFF00848079 /* AppDelegate.swift */,
 				7CCC82B6277EFCFF00848079 /* SceneDelegate.swift */,
 				7CCC82B8277EFCFF00848079 /* ViewController.swift */,
+				7C577BE727ABB0BD0071CE57 /* checkViewController.swift */,
 				7C577BA527A2E7C70071CE57 /* PopUpViewController.swift */,
 				7CCC82BA277EFCFF00848079 /* Main.storyboard */,
 				7CCC82BD277EFD0100848079 /* Assets.xcassets */,
@@ -252,7 +255,6 @@
 				BEE7FA06DD3E9473CE31A472 /* Pods-kakaoMap.debug.xcconfig */,
 				E51D708227AF5322631BCA33 /* Pods-kakaoMap.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -404,6 +406,7 @@
 				7CCC82B5277EFCFF00848079 /* AppDelegate.swift in Sources */,
 				7CCC82B7277EFCFF00848079 /* SceneDelegate.swift in Sources */,
 				7C577BA627A2E7C70071CE57 /* PopUpViewController.swift in Sources */,
+				7C577BE827ABB0BD0071CE57 /* checkViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

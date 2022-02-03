@@ -40,6 +40,8 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
         let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         btn.layer.cornerRadius = 10
         btn.backgroundColor = .red
+        btn.setTitle("당첨 확인", for: .normal)
+        btn.addTarget(self, action: #selector(checkPopUpBtn(_:)), for: .touchUpInside)
         return btn
     }()
     
@@ -123,10 +125,11 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
     }
     
     func searchBarAutoLayout() {
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        searchBar.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor).isActive = true
-        searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
-        searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
+        searchBar.snp.makeConstraints { make in
+            make.top.equalTo(view.layoutMarginsGuide)
+            make.leading.equalTo(view).offset(10)
+            make.trailing.equalTo(view).offset(-10)
+        }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -137,19 +140,20 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
     
     
     func currentLocBtnAutoLayout() {
-        currentLocBtn.translatesAutoresizingMaskIntoConstraints = false
-        currentLocBtn.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        currentLocBtn.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        currentLocBtn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
-        currentLocBtn.bottomAnchor.constraint(equalTo: bottomStackView.topAnchor, constant: -20).isActive = true
+        currentLocBtn.snp.makeConstraints { make in
+            make.size.width.height.equalTo(50)
+            make.trailing.equalTo(view).offset(-10)
+            make.bottom.equalTo(bottomStackView.snp.top).offset(-20)
+        }
     }
     
     func bottomStackViewAutoLayout() {
-        bottomStackView.translatesAutoresizingMaskIntoConstraints = false
-        bottomStackView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        bottomStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        bottomStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        bottomStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30).isActive = true
+        bottomStackView.snp.makeConstraints { make in
+            make.size.height.equalTo(70)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-30)
+        }
     }
     
     func parseLocationCSV(url: URL) {
@@ -195,10 +199,15 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
     }
     
     @objc func didTapPopUpBtn(_ sender: UIButton) {
-        print("Tap")
         let popUpViewController = PopUpViewController()
         popUpViewController.modalPresentationStyle = .overCurrentContext
         present(popUpViewController, animated: true, completion: nil)
+    }
+    
+    @objc func checkPopUpBtn(_ sender: UIButton) {
+        let checkPopUpViewController = checkViewController()
+        checkPopUpViewController.modalPresentationStyle = .overCurrentContext
+        present(checkPopUpViewController, animated: true, completion: nil)
     }
     
 }
