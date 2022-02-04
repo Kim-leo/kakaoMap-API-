@@ -4,6 +4,10 @@
 <dict>
 	<key>KAKAO_APP_KEY</key>
 	<string>993d6f603dfaece91b68b9485f5ef604</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera permissions for taking photos and videos</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Album permissions to save videos</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
