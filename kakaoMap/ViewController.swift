@@ -7,11 +7,14 @@
 
 import UIKit
 import SnapKit
+import CoreLocation
 
 public let defaultPosition = MTMapPointGeo(latitude: 37.576568, longitude: 127.029148)
 
-class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
+
+class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, CLLocationManagerDelegate {
     
+   
     var nameAndAddress = [[String]]()
     
     let searchBar: UISearchBar = {
@@ -50,7 +53,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
         btn.layer.cornerRadius = 10
         btn.backgroundColor = .orange
         btn.setTitle("주변 가게", for: .normal)
-        btn.addTarget(self, action: #selector(loadAddressFromCSV(_:)), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(changeIntoKorean(_:)), for: .touchUpInside)
         return btn
     }()
     
@@ -82,6 +85,11 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
     
     //검색기능
     let searchController = UISearchController(searchResultsController: nil)
+    
+    var locationManager: CLLocationManager!
+    var currentLatitude: Double!
+    var currentLongitude: Double!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,39 +129,34 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
         bottomStackView.addArrangedSubview(checkWinBtn)
         bottomStackView.addArrangedSubview(nearStoreLocBtn)
         bottomStackView.addArrangedSubview(recommendNumberBtn)
-         
+        
+        locationManager = CLLocationManager()
+        currentLatitude = defaultPosition.latitude
+        currentLongitude = defaultPosition.longitude
+        
     }
     
-    func searchBarAutoLayout() {
-        searchBar.snp.makeConstraints { make in
-            make.top.equalTo(view.layoutMarginsGuide)
-            make.leading.equalTo(view).offset(10)
-            make.trailing.equalTo(view).offset(-10)
+    @objc func changeIntoKorean(_ sender: UIButton) {
+        let locationNow = CLLocation(latitude: currentLatitude, longitude: currentLongitude)
+        let geoCoder = CLGeocoder()
+        let locale = Locale(identifier: "Ko-kr")
+        geoCoder.reverseGeocodeLocation(locationNow, preferredLocale: locale) { (poilItem1, error) in
+            if let address:[CLPlacemark] = poilItem1 {
+                if let country: String = address.last?.country { print(country) }
+                if let administrativeArea: String = address.last?.administrativeArea { print(administrativeArea) }
+                if let locality: String = address.last?.locality { print(locality) }
+                if let name: String = address.last?.name { print(name) }
+            }
         }
     }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if let text = searchBar.text {
-            print(text)
-        }
-    }
+  
     
     
-    func currentLocBtnAutoLayout() {
-        currentLocBtn.snp.makeConstraints { make in
-            make.size.width.height.equalTo(50)
-            make.trailing.equalTo(view).offset(-10)
-            make.bottom.equalTo(bottomStackView.snp.top).offset(-20)
-        }
-    }
     
-    func bottomStackViewAutoLayout() {
-        bottomStackView.snp.makeConstraints { make in
-            make.size.height.equalTo(70)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-30)
-        }
+    @objc func printCurrentLocation(_ sender: UIButton) {
+        print(defaultPosition.latitude)
+        print(defaultPosition.longitude)
+        
     }
     
     func parseLocationCSV(url: URL) {
@@ -172,7 +175,6 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
             print("Error")
         }
     }
-    
     @objc func loadAddressFromCSV(_ sender: UIButton) {
         let path = Bundle.main.path(forResource: "nameAndAddress", ofType: ".csv")!
         parseLocationCSV(url: URL(fileURLWithPath: path))
@@ -208,6 +210,35 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate {
         let checkPopUpViewController = checkViewController()
         checkPopUpViewController.modalPresentationStyle = .overCurrentContext
         present(checkPopUpViewController, animated: true, completion: nil)
+    }
+    
+    //AutoLayout
+    func searchBarAutoLayout() {
+        searchBar.snp.makeConstraints { make in
+            make.top.equalTo(view.layoutMarginsGuide)
+            make.leading.equalTo(view).offset(10)
+            make.trailing.equalTo(view).offset(-10)
+        }
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let text = searchBar.text {
+            print(text)
+        }
+    }
+    func currentLocBtnAutoLayout() {
+        currentLocBtn.snp.makeConstraints { make in
+            make.size.width.height.equalTo(50)
+            make.trailing.equalTo(view).offset(-10)
+            make.bottom.equalTo(bottomStackView.snp.top).offset(-20)
+        }
+    }
+    func bottomStackViewAutoLayout() {
+        bottomStackView.snp.makeConstraints { make in
+            make.size.height.equalTo(70)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-30)
+        }
     }
     
 }

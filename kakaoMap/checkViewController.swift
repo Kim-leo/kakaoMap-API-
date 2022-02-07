@@ -197,7 +197,6 @@ class checkViewController: UIViewController, UIImagePickerControllerDelegate & U
             labelArrNum[6].backgroundColor = .white
             labelArrNum[7].backgroundColor = numberColor[intBonusNum!/10]
             
-            
         } catch {
             print("Error: \(error)")
         }
