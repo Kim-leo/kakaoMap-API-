@@ -140,24 +140,21 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         let locationNow = CLLocation(latitude: currentLatitude, longitude: currentLongitude)
         let geoCoder = CLGeocoder()
         let locale = Locale(identifier: "Ko-kr")
+        
+        var currentLocationAddressArray = [String]()
+        
         geoCoder.reverseGeocodeLocation(locationNow, preferredLocale: locale) { (poilItem1, error) in
             if let address:[CLPlacemark] = poilItem1 {
-                if let country: String = address.last?.country { print(country) }
-                if let administrativeArea: String = address.last?.administrativeArea { print(administrativeArea) }
-                if let locality: String = address.last?.locality { print(locality) }
-                if let name: String = address.last?.name { print(name) }
+                if let country: String = address.last?.country { currentLocationAddressArray.append(country) }
+                if let administrativeArea: String = address.last?.administrativeArea { currentLocationAddressArray.append(administrativeArea) }
+                if let locality: String = address.last?.locality { currentLocationAddressArray.append(locality) }
+                if let name: String = address.last?.name { currentLocationAddressArray.append(name) }
+                print(currentLocationAddressArray)
+                
             }
         }
     }
   
-    
-    
-    
-    @objc func printCurrentLocation(_ sender: UIButton) {
-        print(defaultPosition.latitude)
-        print(defaultPosition.longitude)
-        
-    }
     
     func parseLocationCSV(url: URL) {
         do {
