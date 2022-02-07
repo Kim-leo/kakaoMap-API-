@@ -76,6 +76,8 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         return stackView
     }()
     
+    public var currentLocationAddressArray = [String]()
+    public var joinedAddressArray: String!
     
 
     var mapView: MTMapView!
@@ -85,11 +87,12 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
     
     //검색기능
     let searchController = UISearchController(searchResultsController: nil)
+    var searchWords: String?
     
+
     var locationManager: CLLocationManager!
     var currentLatitude: Double!
     var currentLongitude: Double!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,7 +136,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         locationManager = CLLocationManager()
         currentLatitude = defaultPosition.latitude
         currentLongitude = defaultPosition.longitude
-        
+  
     }
     
     @objc func changeIntoKorean(_ sender: UIButton) {
@@ -141,17 +144,25 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         let geoCoder = CLGeocoder()
         let locale = Locale(identifier: "Ko-kr")
         
-        var currentLocationAddressArray = [String]()
         
-        geoCoder.reverseGeocodeLocation(locationNow, preferredLocale: locale) { (poilItem1, error) in
+        geoCoder.reverseGeocodeLocation(locationNow, preferredLocale: locale) { [self] (poilItem1, error) in
             if let address:[CLPlacemark] = poilItem1 {
-                if let country: String = address.last?.country { currentLocationAddressArray.append(country) }
-                if let administrativeArea: String = address.last?.administrativeArea { currentLocationAddressArray.append(administrativeArea) }
-                if let locality: String = address.last?.locality { currentLocationAddressArray.append(locality) }
-                if let name: String = address.last?.name { currentLocationAddressArray.append(name) }
-                print(currentLocationAddressArray)
-                
+                if let thoroughfare: String = address.last?.thoroughfare { currentLocationAddressArray.append(thoroughfare)}
             }
+            currentLocationAddressArray.append("로또")
+            joinedAddressArray = currentLocationAddressArray.joined(separator: " ")
+            print(joinedAddressArray!)
+            searchBar.text = self.joinedAddressArray
+            print(searchBar.text!)
+        }
+        
+        
+        
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let text = searchBar.text {
+            print(text)      
         }
     }
   
@@ -209,6 +220,8 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         present(checkPopUpViewController, animated: true, completion: nil)
     }
     
+ 
+    
     //AutoLayout
     func searchBarAutoLayout() {
         searchBar.snp.makeConstraints { make in
@@ -217,11 +230,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
             make.trailing.equalTo(view).offset(-10)
         }
     }
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if let text = searchBar.text {
-            print(text)
-        }
-    }
+
     func currentLocBtnAutoLayout() {
         currentLocBtn.snp.makeConstraints { make in
             make.size.width.height.equalTo(50)
