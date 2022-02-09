@@ -6,6 +6,8 @@ target 'kakaoMap' do
   use_frameworks!
   pod 'SnapKit', '~> 5.0.0'
   pod 'SwiftSoup'
+  pod 'Alamofire', '~> 5.5'
+  pod 'SwiftyJSON', '~> 4.0'
   # Pods for kakaoMap
 
 end
