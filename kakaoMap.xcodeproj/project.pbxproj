@@ -12,8 +12,6 @@
 		7C577BA627A2E7C70071CE57 /* PopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C577BA527A2E7C70071CE57 /* PopUpViewController.swift */; };
 		7C577BE827ABB0BD0071CE57 /* checkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C577BE727ABB0BD0071CE57 /* checkViewController.swift */; };
 		7CC0591D27B2616E00B659AD /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0591C27B2616E00B659AD /* Place.swift */; };
-		7CC3ABA127B401EF005A27F3 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC3ABA027B401EF005A27F3 /* Models.swift */; };
-		7CC3ABA727B4027A005A27F3 /* storeAddress.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CC3ABA627B4027A005A27F3 /* storeAddress.json */; };
 		7CCC82B5277EFCFF00848079 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCC82B4277EFCFF00848079 /* AppDelegate.swift */; };
 		7CCC82B7277EFCFF00848079 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCC82B6277EFCFF00848079 /* SceneDelegate.swift */; };
 		7CCC82B9277EFCFF00848079 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCC82B8277EFCFF00848079 /* ViewController.swift */; };
@@ -62,8 +60,6 @@
 		7C577BA527A2E7C70071CE57 /* PopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpViewController.swift; sourceTree = "<group>"; };
 		7C577BE727ABB0BD0071CE57 /* checkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = checkViewController.swift; sourceTree = "<group>"; };
 		7CC0591C27B2616E00B659AD /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
-		7CC3ABA027B401EF005A27F3 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
-		7CC3ABA627B4027A005A27F3 /* storeAddress.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = storeAddress.json; sourceTree = "<group>"; };
 		7CCC82B1277EFCFF00848079 /* kakaoMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kakaoMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CCC82B4277EFCFF00848079 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7CCC82B6277EFCFF00848079 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -167,8 +163,6 @@
 				7CCC82B6277EFCFF00848079 /* SceneDelegate.swift */,
 				7CC0591C27B2616E00B659AD /* Place.swift */,
 				7CCC82B8277EFCFF00848079 /* ViewController.swift */,
-				7CC3ABA027B401EF005A27F3 /* Models.swift */,
-				7CC3ABA627B4027A005A27F3 /* storeAddress.json */,
 				7C577BE727ABB0BD0071CE57 /* checkViewController.swift */,
 				7C577BA527A2E7C70071CE57 /* PopUpViewController.swift */,
 				7CCC82BA277EFCFF00848079 /* Main.storyboard */,
@@ -325,7 +319,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CCC8358277EFF1400848079 /* map_present.png in Resources */,
-				7CC3ABA727B4027A005A27F3 /* storeAddress.json in Resources */,
 				7CCC834E277EFF1400848079 /* map_pin@3x.png in Resources */,
 				7CCC834C277EFF1400848079 /* map_pin_red@3x.png in Resources */,
 				7CCC8357277EFF1400848079 /* map_pin.png in Resources */,
@@ -414,7 +407,6 @@
 				7CC0591D27B2616E00B659AD /* Place.swift in Sources */,
 				7C577BA627A2E7C70071CE57 /* PopUpViewController.swift in Sources */,
 				7C577BE827ABB0BD0071CE57 /* checkViewController.swift in Sources */,
-				7CC3ABA127B401EF005A27F3 /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,7 +13,7 @@ import SwiftyJSON
 import SwiftSoup
 
 
-public let defaultPosition = MTMapPointGeo(latitude: 37.576568, longitude: 127.029148)
+public let defaultPosition = MTMapPointGeo(latitude: 37.5754220273106, longitude: 127.056311940389)
 
 
 class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, CLLocationManagerDelegate {
@@ -79,15 +79,19 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         return stackView
     }()
     
+    
+    
     public var currentLocationAddressArray = [String]()
     public var currentLocality: String!
-    
-    
+    var eachStoreCoordinateX: Double!
+    var eachStoreCoordinateY: Double!
 
     var mapView: MTMapView!
     
     var mapPoint1: MTMapPoint!
     var poilItem1: MTMapPOIItem?
+    
+ 
     
     //검색기능
     let searchController = UISearchController(searchResultsController: nil)
@@ -121,6 +125,14 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         poilItem1?.itemName = "현재 위치"
         mapView.add(poilItem1)
         
+        for i in 0..<5 {
+            let poilItem = MTMapPOIItem()
+            poilItem.itemName = "Hey"
+            poilItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: (37.5744220273106 + 0.001 * Double(i)), longitude: (127.057311940389 + 0.001 * Double(i))))
+            poilItem.markerType = .redPin
+            mapView.addPOIItems([poilItem])
+        }
+        
        //searchBar
         searchBar.delegate = self
         self.view.addSubview(searchBar)
@@ -142,6 +154,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         currentLongitude = defaultPosition.longitude
         
         fetchCurrentPlace() // 현재위치 "ㅇㅇ구"는 currentLocationAddressArray에 배열로, joinedAddressArray에는 String으로 저장됨.
+        
     }
     
     //현재위치 "ㅇㅇ구" 받아오기
@@ -165,10 +178,11 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
             currentLocality = currentLocationAddressArray.joined(separator: " ")
             print(currentLocality!)
         }
-        
     }
     
     @objc func firstTry(_ sender: UIButton) {
+        var resultList = [Place]()
+        
         let headers: HTTPHeaders = [
                     "Authorization": "KakaoAK c1291537d6477a23673e8a1b0f4702ff"
                 ]
@@ -179,8 +193,6 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
                     "size": 15  //한 페이지에 보여질 문서의 개수 (1~15)
                     //"radius": 100
                 ]
-        
-        var resultList = [Place]()
     
         let urlString = "https://dapi.kakao.com/v2/local/search/keyword.json?radius=200"
         let encodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
@@ -188,7 +200,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
                 
         AF.request(url, method: .get,
              parameters: parameters, headers: headers)
-             .responseJSON(completionHandler: { response in
+            .responseJSON(completionHandler: { [self] response in
                  switch response.result {
                  case .success(let value):
                     if let detailsPlace = JSON(value)["documents"].array{
@@ -202,14 +214,27 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
                         }
                      }
                      //여기서부터: 좌표를 가져온 후 지도상에 핀으로 출력해야 함.
-                    
-                     print(resultList)
-                     
-                     
+                     //print(resultList[2].x)   127.asdasd
+                     //print(resultList.count)  8
+                     for i in 0..<resultList.count {
+                         eachStoreCoordinateX = Double(resultList[i].x)
+                         eachStoreCoordinateY = Double(resultList[i].y)
+                         print(eachStoreCoordinateX!, eachStoreCoordinateY!)
+                         createPin(itemName: resultList[i].placeName, getX: eachStoreCoordinateX!, getY: eachStoreCoordinateY!, markerType: .redPin)
+                     }
                    case .failure(let error):
                        print(error)
                    }
                })
+    }
+    
+    func createPin(itemName: String, getX: Double, getY: Double, markerType: MTMapPOIItemMarkerType) -> MTMapPOIItem {
+        let poilItem = MTMapPOIItem()
+        poilItem.itemName = "\(itemName)"
+        poilItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: getX, longitude: getY))
+        poilItem.markerType = .redPin
+        mapView.addPOIItems([poilItem])
+        return poilItem
     }
         
     //현재위치 좌표 나타내기
@@ -267,13 +292,6 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
     @objc func loadAddressFromCSV(_ sender: UIButton) {
         let path = Bundle.main.path(forResource: "storeAddress", ofType: ".csv")!
         parseLocationCSV(url: URL(fileURLWithPath: path))
-        /*
-        //csv파일 내의 가게 "구"와 현재위치 "구" 비교하기
-        if nameAndAddress[1][0] as? String == "강남구" {
-            print(nameAndAddress[1])
-        } else {
-            print("opps")
-        }*/
         print(nameAndAddress, terminator: "")
     }
     
