@@ -10,8 +10,8 @@ import Foundation
 public struct Place: Decodable{
         let placeName :String
         let roadAdressName:String
-        let longitudeX:String
-        let latitudeY:String
+        let x:String
+        let y:String
     }
     
 
