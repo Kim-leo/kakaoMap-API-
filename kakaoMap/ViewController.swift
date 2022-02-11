@@ -13,7 +13,7 @@ import SwiftyJSON
 import SwiftSoup
 
 
-public let defaultPosition = MTMapPointGeo(latitude: 37.562615812096, longitude: 127.063214443253)
+public let defaultPosition = MTMapPointGeo(latitude: 37.5744220273106, longitude: 127.057311940389)
 
 
 class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, CLLocationManagerDelegate {
@@ -56,7 +56,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         btn.layer.cornerRadius = 10
         btn.backgroundColor = .orange
         btn.setTitle("주변 가게", for: .normal)
-        btn.addTarget(self, action: #selector(getStoresCoordinates(_:)), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(nearStore(_:)), for: .touchUpInside)
         return btn
     }()
     
@@ -95,8 +95,6 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
     
     //검색기능
     let searchController = UISearchController(searchResultsController: nil)
-    var searchWords: String?
-    
 
     var locationManager: CLLocationManager!
     var currentLatitude: Double!
@@ -104,6 +102,8 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         mapView = MTMapView(frame: self.view.frame)
         mapView.delegate = self
@@ -120,15 +120,13 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         //마커 추가
         self.mapPoint1 = MTMapPoint(geoCoord: defaultPosition)
         poilItem1 = MTMapPOIItem()
-        poilItem1?.markerType = MTMapPOIItemMarkerType.bluePin
+        poilItem1?.markerType = .yellowPin
         poilItem1?.mapPoint = mapPoint1
         poilItem1?.itemName = "현재 위치"
         mapView.add(poilItem1)
         
-       //searchBar
-        searchBar.delegate = self
-        self.view.addSubview(searchBar)
-        searchBarAutoLayout()
+        //searchBar
+         setSearchBar()
         
        //stackview and 3 buttons
         self.view.addSubview(bottomStackView)
@@ -146,10 +144,9 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         currentLongitude = defaultPosition.longitude
         
         
-        // 현재위치 "ㅇㅇ구"는 currentLocationAddressArray에 배열로, joinedAddressArray에는 String으로 저장됨.
+        // 현재위치 "ㅇㅇ구"는 currentLocationAddressArray에 배열로, currentLocality에는 String으로 저장됨.
         fetchCurrentPlace()
       
-        
     }
     
     //각 가게 별 좌표와 이름으로 핀 만들기.
@@ -163,39 +160,40 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         return poilItem
     }
     
-    
     //현재위치 "ㅇㅇ구" 받아오기
     func fetchCurrentPlace() {
         let locationNow = CLLocation(latitude: currentLatitude, longitude: currentLongitude)
         let geoCoder = CLGeocoder()
         let locale = Locale(identifier: "Ko-kr")
         
-        
         geoCoder.reverseGeocodeLocation(locationNow, preferredLocale: locale) { [self] (poilItem1, error) in
             if let address:[CLPlacemark] = poilItem1 {
+                //ㅇㅇ구
+//                if let administrativeArea: String = address.last?.administrativeArea {
+//                    currentLocationAddressArray.append(administrativeArea)
+//                }
                 //ㅇㅇ시
-                if let city: String = address.last?.locality{
-                    currentLocationAddressArray.append(city)
+                if let locality: String = address.last?.locality{
+                    currentLocationAddressArray.append(locality)
                 }
                 //ㅇㅇ동
 //                if let dong: String = address.last?.thoroughfare {
 //                    currentLocationAddressArray.append(dong)
 //                }
+                
             }
             currentLocality = currentLocationAddressArray.joined(separator: " ")
             print(currentLocality!)
         }
     }
     
-    //주변 가게 좌표 받아오기
-    @objc func getStoresCoordinates(_ sender: UIButton) {
-        
+    func getStoresCoordinates() {
         let headers: HTTPHeaders = [
                     "Authorization": "KakaoAK c1291537d6477a23673e8a1b0f4702ff"
                 ]
                 
         let parameters: [String: Any] = [
-                    "query": currentLocality + "로또",
+                    "query": currentLocality + "복권",
                     "page": 20, //결과페이지 번호 (1~45)
                     "size": 15  //한 페이지에 보여질 문서의 개수 (1~15)
                     //"radius": 100
@@ -229,25 +227,20 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
                          eachStoreCoordinateY = Double(resultList[i].y)
                          eachStoreName = resultList[i].placeName
                          
-                         print(eachStoreName!, eachStoreCoordinateX!, eachStoreCoordinateY!)
+                         //print(eachStoreName!, eachStoreCoordinateX!, eachStoreCoordinateY!)
+                         
                          createPin(itemName: eachStoreName, getX: eachStoreCoordinateY, getY: eachStoreCoordinateX, markerType: .redPin)
                          
                          eachStoreName = ""
                          eachStoreCoordinateX = 0
                          eachStoreCoordinateY = 0
-                         
                      }
-                     
-                     
-                     
                    case .failure(let error):
                        print(error)
                    }
                })
     }
     
-    
-        
     //현재위치 좌표 나타내기
     fileprivate func setLocationManager() {
         locationManager.delegate = self
@@ -269,14 +262,78 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Error: \(error.localizedDescription)")
     }
-
     
+    //서치바
+    func setSearchBar() {
+        searchBar.delegate = self
+        searchBar.searchTextField.backgroundColor = .systemGray6
+        searchBar.placeholder = "장소를 검색해보세요."
+        self.view.addSubview(searchBar)
+        searchBarAutoLayout()
+    }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if var text = searchBar.text {
+        if let text = searchBar.text {
             print(text)
+            
+            let headers: HTTPHeaders = [
+                        "Authorization": "KakaoAK c1291537d6477a23673e8a1b0f4702ff"
+                    ]
+                    
+            let parameters: [String: Any] = [
+                        "query": text + "복권",
+                        "page": 30, //결과페이지 번호 (1~45)
+                        "size": 15  //한 페이지에 보여질 문서의 개수 (1~15)
+                        //"radius": 100
+                    ]
         
-                
+            let urlString = "https://dapi.kakao.com/v2/local/search/keyword.json?radius=200"
+            let encodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+            let url = URL(string: encodedString)!
+                    
+            AF.request(url, method: .get,
+                 parameters: parameters, headers: headers)
+                .responseJSON(completionHandler: { [self] response in
+                     switch response.result {
+                     case .success(let value):
+                        if let detailsPlace = JSON(value)["documents"].array{
+                            for item in detailsPlace {
+                                let placeName = item["place_name"].string ?? ""
+                                let roadAdressName = item["road_address_name"].string ?? ""
+                                let x = item["x"].string ?? ""
+                                let y = item["y"].string ?? ""
+                                self.resultList.append(Place(placeName: placeName,
+                                roadAdressName: roadAdressName, x: x, y: y))
+                            }
+                         }
+                         
+                         mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: Double(resultList[0].y)!, longitude: Double(resultList[0].x)!)), animated: true)
+                         mapView.showCurrentLocationMarker = true
+                         mapView.currentLocationTrackingMode = .onWithHeading
+                         
+                         //여기서부터: 좌표를 가져온 후 지도상에 핀으로 출력해야 함.
+                         //print(resultList[2].x)   127.asdasd
+                         //print(resultList.count)  8
+                         resultListCount = resultList.count
+                         for i in 0..<resultListCount {
+                             eachStoreCoordinateX = Double(resultList[i].x)
+                             eachStoreCoordinateY = Double(resultList[i].y)
+                             eachStoreName = resultList[i].placeName
+                             
+                             print(eachStoreName!, eachStoreCoordinateX!, eachStoreCoordinateY!)
+                             
+                             createPin(itemName: eachStoreName, getX: eachStoreCoordinateY, getY: eachStoreCoordinateX, markerType: .redPin)
+                             
+//                             eachStoreName = ""
+//                             eachStoreCoordinateX = 0
+//                             eachStoreCoordinateY = 0
+                         }
+                         
+                         
+                       case .failure(let error):
+                           print(error)
+                       }
+                   })
         }
     }
   
@@ -300,6 +357,12 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
             print("Error")
         }
     }
+    
+    //주변 가게 좌표 받아오기
+    @objc func nearStore(_ sender: UIButton) {
+        getStoresCoordinates()
+    }
+    
     @objc func loadAddressFromCSV(_ sender: UIButton) {
         let path = Bundle.main.path(forResource: "storeAddress", ofType: ".csv")!
         parseLocationCSV(url: URL(fileURLWithPath: path))
