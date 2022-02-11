@@ -13,7 +13,7 @@ import SwiftyJSON
 import SwiftSoup
 
 
-public let defaultPosition = MTMapPointGeo(latitude: 37.5754220273106, longitude: 127.056311940389)
+public let defaultPosition = MTMapPointGeo(latitude: 37.562615812096, longitude: 127.063214443253)
 
 
 class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, CLLocationManagerDelegate {
@@ -56,7 +56,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         btn.layer.cornerRadius = 10
         btn.backgroundColor = .orange
         btn.setTitle("주변 가게", for: .normal)
-        btn.addTarget(self, action: #selector(firstTry(_:)), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(getStoresCoordinates(_:)), for: .touchUpInside)
         return btn
     }()
     
@@ -79,10 +79,9 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         return stackView
     }()
     
-    
-    
     public var currentLocationAddressArray = [String]()
-    public var currentLocality: String!
+    var currentLocality: String!
+    var eachStoreName: String!
     var eachStoreCoordinateX: Double!
     var eachStoreCoordinateY: Double!
 
@@ -91,7 +90,8 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
     var mapPoint1: MTMapPoint!
     var poilItem1: MTMapPOIItem?
     
- 
+    var resultList = [Place]()
+    var resultListCount = 0
     
     //검색기능
     let searchController = UISearchController(searchResultsController: nil)
@@ -120,18 +120,10 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         //마커 추가
         self.mapPoint1 = MTMapPoint(geoCoord: defaultPosition)
         poilItem1 = MTMapPOIItem()
-        poilItem1?.markerType = MTMapPOIItemMarkerType.redPin
+        poilItem1?.markerType = MTMapPOIItemMarkerType.bluePin
         poilItem1?.mapPoint = mapPoint1
         poilItem1?.itemName = "현재 위치"
         mapView.add(poilItem1)
-        
-        for i in 0..<5 {
-            let poilItem = MTMapPOIItem()
-            poilItem.itemName = "Hey"
-            poilItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: (37.5744220273106 + 0.001 * Double(i)), longitude: (127.057311940389 + 0.001 * Double(i))))
-            poilItem.markerType = .redPin
-            mapView.addPOIItems([poilItem])
-        }
         
        //searchBar
         searchBar.delegate = self
@@ -153,9 +145,24 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         currentLatitude = defaultPosition.latitude
         currentLongitude = defaultPosition.longitude
         
-        fetchCurrentPlace() // 현재위치 "ㅇㅇ구"는 currentLocationAddressArray에 배열로, joinedAddressArray에는 String으로 저장됨.
+        
+        // 현재위치 "ㅇㅇ구"는 currentLocationAddressArray에 배열로, joinedAddressArray에는 String으로 저장됨.
+        fetchCurrentPlace()
+      
         
     }
+    
+    //각 가게 별 좌표와 이름으로 핀 만들기.
+    @discardableResult
+    func createPin(itemName: String, getX: Double, getY: Double, markerType: MTMapPOIItemMarkerType) -> MTMapPOIItem {
+        let poilItem = MTMapPOIItem()
+        poilItem.itemName = "\(itemName)"
+        poilItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: getX, longitude: getY))
+        poilItem.markerType = .redPin
+        mapView.addPOIItems([poilItem])
+        return poilItem
+    }
+    
     
     //현재위치 "ㅇㅇ구" 받아오기
     func fetchCurrentPlace() {
@@ -180,8 +187,8 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         }
     }
     
-    @objc func firstTry(_ sender: UIButton) {
-        var resultList = [Place]()
+    //주변 가게 좌표 받아오기
+    @objc func getStoresCoordinates(_ sender: UIButton) {
         
         let headers: HTTPHeaders = [
                     "Authorization": "KakaoAK c1291537d6477a23673e8a1b0f4702ff"
@@ -209,33 +216,37 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
                             let roadAdressName = item["road_address_name"].string ?? ""
                             let x = item["x"].string ?? ""
                             let y = item["y"].string ?? ""
-                            resultList.append(Place(placeName: placeName,
+                            self.resultList.append(Place(placeName: placeName,
                             roadAdressName: roadAdressName, x: x, y: y))
                         }
                      }
                      //여기서부터: 좌표를 가져온 후 지도상에 핀으로 출력해야 함.
                      //print(resultList[2].x)   127.asdasd
                      //print(resultList.count)  8
-                     for i in 0..<resultList.count {
+                     resultListCount = resultList.count
+                     for i in 0..<resultListCount {
                          eachStoreCoordinateX = Double(resultList[i].x)
                          eachStoreCoordinateY = Double(resultList[i].y)
-                         print(eachStoreCoordinateX!, eachStoreCoordinateY!)
-                         createPin(itemName: resultList[i].placeName, getX: eachStoreCoordinateX!, getY: eachStoreCoordinateY!, markerType: .redPin)
+                         eachStoreName = resultList[i].placeName
+                         
+                         print(eachStoreName!, eachStoreCoordinateX!, eachStoreCoordinateY!)
+                         createPin(itemName: eachStoreName, getX: eachStoreCoordinateY, getY: eachStoreCoordinateX, markerType: .redPin)
+                         
+                         eachStoreName = ""
+                         eachStoreCoordinateX = 0
+                         eachStoreCoordinateY = 0
+                         
                      }
+                     
+                     
+                     
                    case .failure(let error):
                        print(error)
                    }
                })
     }
     
-    func createPin(itemName: String, getX: Double, getY: Double, markerType: MTMapPOIItemMarkerType) -> MTMapPOIItem {
-        let poilItem = MTMapPOIItem()
-        poilItem.itemName = "\(itemName)"
-        poilItem.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: getX, longitude: getY))
-        poilItem.markerType = .redPin
-        mapView.addPOIItems([poilItem])
-        return poilItem
-    }
+    
         
     //현재위치 좌표 나타내기
     fileprivate func setLocationManager() {
