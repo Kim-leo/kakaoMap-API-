@@ -60,10 +60,20 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         return btn
     }()
     
-    let recommendNumberBtn: UIButton = {
+    let goToKakaoMapAppBtn: UIButton = {
         let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         btn.layer.cornerRadius = 10
         btn.backgroundColor = .yellow
+        btn.setTitleColor(.black, for: .normal)
+        btn.setTitle("길찾기", for: .normal)
+        btn.addTarget(self, action: #selector(goToKakakoMapApp(_:)), for: .touchUpInside)
+        return btn
+    }()
+    
+    let recommendNumberBtn: UIButton = {
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        btn.layer.cornerRadius = 10
+        btn.backgroundColor = .green
         btn.setTitleColor(.black, for: .normal)
         btn.setTitle("번호 추천", for: .normal)
         btn.addTarget(self, action: #selector(didTapPopUpBtn(_:)), for: .touchUpInside)
@@ -137,6 +147,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         
         bottomStackView.addArrangedSubview(checkWinBtn)
         bottomStackView.addArrangedSubview(nearStoreLocBtn)
+        bottomStackView.addArrangedSubview(goToKakaoMapAppBtn)
         bottomStackView.addArrangedSubview(recommendNumberBtn)
         
         locationManager = CLLocationManager()
@@ -147,6 +158,30 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         // 현재위치 "ㅇㅇ구"는 currentLocationAddressArray에 배열로, currentLocality에는 String으로 저장됨.
         fetchCurrentPlace()
       
+    }
+    //길찾기 버튼
+    @objc func goToKakakoMapApp(_ sender: UIButton) {
+        let alert = UIAlertController(title: "카카오맵 열기", message: "길찾기를 위해 카카오맵을 실행하시나요?", preferredStyle: UIAlertController.Style.alert)
+        let okAction = UIAlertAction(title: "실행", style: .default) { (action) in
+            //sp: 출발점 -> 현재위치
+            //ep: 도착점 -> 해당 핀 가게 위치
+            let kakaoMap = "kakaomap://route?sp=\(defaultPosition.latitude),\(defaultPosition.longitude)&ep=37.4979502,127.0276368&by=FOOT"
+            
+            let kakaoMapURL = NSURL(string: kakaoMap)
+            
+            if (UIApplication.shared.canOpenURL(kakaoMapURL! as URL)) {
+                UIApplication.shared.open(kakaoMapURL! as URL)
+            } else {
+                print("카카오맵 없음!")
+            }
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        alert.addAction(cancelAction)
+        alert.addAction(okAction)
+        present(alert, animated: false, completion: nil)
+        
+        
     }
     
     //각 가게 별 좌표와 이름으로 핀 만들기.
@@ -372,7 +407,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         print(nameAndAddress, terminator: "")
     }
     
-    @objc func randomNumber() {
+    @objc func randomNumber(_ sender: UIButton) {
         var numbers: [Int] = []
         while numbers.count < 6 {
             let number = Int.random(in: 1...45)
