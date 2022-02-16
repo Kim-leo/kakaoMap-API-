@@ -273,7 +273,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if let text = searchBar.text {
+        if var text = searchBar.text {
             print(text)
             
             let headers: HTTPHeaders = [
@@ -324,17 +324,19 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
                              
                              createPin(itemName: eachStoreName, getX: eachStoreCoordinateY, getY: eachStoreCoordinateX, markerType: .redPin)
                              
-//                             eachStoreName = ""
-//                             eachStoreCoordinateX = 0
-//                             eachStoreCoordinateY = 0
+                             eachStoreName = ""
+                             eachStoreCoordinateX = 0
+                             eachStoreCoordinateY = 0
                          }
-                         
+                         //다음 검색을 위해 이전 결과 리스트 초기화.
+                         resultList = [Place]()
                          
                        case .failure(let error):
                            print(error)
                        }
                    })
         }
+        
     }
   
     
@@ -361,6 +363,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
     //주변 가게 좌표 받아오기
     @objc func nearStore(_ sender: UIButton) {
         getStoresCoordinates()
+        self.viewDidLoad()
     }
     
     @objc func loadAddressFromCSV(_ sender: UIButton) {
