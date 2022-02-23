@@ -224,7 +224,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
     
     func getStoresCoordinates() {
         let headers: HTTPHeaders = [
-                    "Authorization": "KakaoAK c1291537d6477a23673e8a1b0f4702ff"
+                    "Authorization": "" //my api KEY
                 ]
                 
         let parameters: [String: Any] = [
@@ -312,7 +312,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
             print(text)
             
             let headers: HTTPHeaders = [
-                        "Authorization": "KakaoAK c1291537d6477a23673e8a1b0f4702ff"
+                        "Authorization": ""
                     ]
                     
             let parameters: [String: Any] = [
