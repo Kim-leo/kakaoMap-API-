@@ -154,12 +154,11 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         currentLatitude = defaultPosition.latitude
         currentLongitude = defaultPosition.longitude
         
-        
         // 현재위치 "ㅇㅇ구"는 currentLocationAddressArray에 배열로, currentLocality에는 String으로 저장됨.
         fetchCurrentPlace()
       
     }
-    //길찾기 버튼
+    //길찾기 버튼 -> 카카오맵App 실
     @objc func goToKakakoMapApp(_ sender: UIButton) {
         let alert = UIAlertController(title: "카카오맵 열기", message: "길찾기를 위해 카카오맵을 실행하시나요?", preferredStyle: UIAlertController.Style.alert)
         let okAction = UIAlertAction(title: "실행", style: .default) { (action) in
@@ -312,7 +311,7 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
             print(text)
             
             let headers: HTTPHeaders = [
-                        "Authorization": ""
+                        "Authorization": "" //KakaoAK KEY
                     ]
                     
             let parameters: [String: Any] = [
@@ -373,27 +372,6 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         }
         
     }
-  
-    
-    func parseLocationCSV(url: URL) {
-        do {
-            let data = try Data(contentsOf: url)
-            let dataEncoded = String(data: data, encoding: .utf8)
-            
-            if let dataArr = dataEncoded?.components(separatedBy: "\n").map({$0.components(separatedBy: ",")}) {
-                for item in dataArr {
-                    /*
-                    if nameAndAddress.count < 50 {
-                        nameAndAddress.append(item)
-                    }
-                     */
-                    nameAndAddress.append(item)
-                }
-            }
-        } catch {
-            print("Error")
-        }
-    }
     
     //주변 가게 좌표 받아오기
     @objc func nearStore(_ sender: UIButton) {
@@ -401,37 +379,21 @@ class ViewController: UIViewController, MTMapViewDelegate, UISearchBarDelegate, 
         self.viewDidLoad()
     }
     
-    @objc func loadAddressFromCSV(_ sender: UIButton) {
-        let path = Bundle.main.path(forResource: "storeAddress", ofType: ".csv")!
-        parseLocationCSV(url: URL(fileURLWithPath: path))
-        print(nameAndAddress, terminator: "")
-    }
-    
-    @objc func randomNumber(_ sender: UIButton) {
-        var numbers: [Int] = []
-        while numbers.count < 6 {
-            let number = Int.random(in: 1...45)
-            if !numbers.contains(number) {
-                numbers.append(number)
-            }
-        }
-        for i in numbers.sorted() {
-            print(i, terminator: " ")
-        }
-    }
-    
+   //현재위치 버튼
     @objc func backToCurrentPlace() {
         mapView.setMapCenter(MTMapPoint(geoCoord: defaultPosition), animated: true)
         mapView.showCurrentLocationMarker = true
         mapView.currentLocationTrackingMode = .onWithHeading
     }
     
+   //번호추천 버튼
     @objc func didTapPopUpBtn(_ sender: UIButton) {
         let popUpViewController = PopUpViewController()
         popUpViewController.modalPresentationStyle = .overCurrentContext
         present(popUpViewController, animated: true, completion: nil)
     }
     
+   //당첨확인 버튼
     @objc func checkPopUpBtn(_ sender: UIButton) {
         let checkPopUpViewController = checkViewController()
         checkPopUpViewController.modalPresentationStyle = .overCurrentContext
